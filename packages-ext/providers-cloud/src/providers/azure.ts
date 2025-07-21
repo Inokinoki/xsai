@@ -41,6 +41,16 @@ export interface CreateAzureOptions {
    * @see {@link https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#uri-parameters}
    */
   resourceName: string
+  /**
+   * Azure endpoint base URL.
+   *
+   * If passed, it will override URL derived from the resource name.
+   * On Azure AI Foundry portal, you can go to https://ai.azure.com/build/overview > Choose the project >
+   * Home > Azure OpenAI endpoint to get the correct endpoint.
+   *
+   * @see {@link https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#uri-parameters}
+   */
+  baseURL?: string,
 }
 
 /**
@@ -65,7 +75,7 @@ export const createAzure = async (options: CreateAzureOptions) => {
   //
   // For *.openai.azure.com, you can learn more here:
   // https://learn.microsoft.com/en-us/azure/ai-services/openai/reference
-  const baseURL = `https://${options.resourceName}.services.ai.azure.com/models/`
+  const baseURL = options.baseURL ?? `https://${options.resourceName}.services.ai.azure.com/models/`
   const fetch: Fetch = async (input, init) => {
     if (options.apiVersion != null)
       input.searchParams.set('api-version', options.apiVersion)
